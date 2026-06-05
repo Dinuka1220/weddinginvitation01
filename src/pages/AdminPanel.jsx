@@ -1,11 +1,22 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
 /* ── helpers ── */
-function getRSVPs() {
-  return JSON.parse(localStorage.getItem('wedding_rsvp') || '[]');
+async function fetchRSVPs() {
+  const response = await fetch('/api/rsvps');
+  if (!response.ok) {
+    throw new Error('Failed to fetch RSVPs');
+  }
+  return await response.json();
 }
-function clearRSVPs() {
-  localStorage.removeItem('wedding_rsvp');
+
+async function deleteRSVPs() {
+  const response = await fetch('/api/rsvps', {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error('Failed to clear RSVPs');
+  }
+  return await response.json();
 }
 function toCSV(data) {
   const header = ['ID', 'Name', 'Side', 'Phone', 'Message', 'Attendance', 'Submitted At'];
@@ -57,8 +68,42 @@ export default function AdminPanel() {
   const [search,      setSearch]    = useState('');
   const [confirmClear, setConfirmClear] = useState(false);
   const [refreshKey,  setRefreshKey] = useState(0);
+  const [loading,     setLoading]   = useState(false);
+  const [error,       setError]     = useState('');
 
-  useEffect(() => { if (loggedIn) setData(getRSVPs()); }, [loggedIn, refreshKey]);
+  useEffect(() => {
+    if (loggedIn) {
+      const loadData = async () => {
+        setLoading(true);
+        setError('');
+        try {
+          const res = await fetchRSVPs();
+          setData(res);
+        } catch (err) {
+          console.error(err);
+          setError('Failed to load RSVP data. Please check MongoDB connection.');
+        } finally {
+          setLoading(false);
+        }
+      };
+      loadData();
+    }
+  }, [loggedIn, refreshKey]);
+
+  const handleClearAll = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      await deleteRSVPs();
+      setData([]);
+      setConfirmClear(false);
+    } catch (err) {
+      console.error(err);
+      setError('Failed to delete RSVP data from MongoDB.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -199,6 +244,24 @@ export default function AdminPanel() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 md:px-8 py-8 space-y-8">
+        {/* Error banner */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center justify-between text-xs font-sans">
+            <span>{error}</span>
+            <button onClick={() => setError('')} className="font-bold hover:opacity-80">✕</button>
+          </div>
+        )}
+
+        {/* Loading indicator */}
+        {loading && (
+          <div className="flex items-center justify-center py-3 bg-white/60 backdrop-blur-sm rounded-xl border border-[#D89B84]/20 text-[#A46752] text-xs font-sans">
+            <svg className="animate-spin -ml-1 mr-3 h-4 w-4 text-[#A46752]" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+            </svg>
+            <span>Synchronizing with MongoDB...</span>
+          </div>
+        )}
 
         {/* ── Stat cards ── */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
@@ -290,9 +353,9 @@ export default function AdminPanel() {
               <table className="w-full text-sm">
                 <thead>
                   <tr style={{ background: 'linear-gradient(135deg, #F5E8E4, #FAF3F0)' }}>
-                    {['Name', 'Side', 'Phone', 'Message', 'Attendance', 'Date'].map(h => (
+                    {['Name', 'Side', 'Phone', 'Message', 'Attendance', 'Date', ''].map((h, index) => (
                       <th
-                        key={h}
+                        key={index}
                         className="px-4 py-3.5 text-left font-sans text-[9px] uppercase tracking-widest text-[#3E2723]/50 font-semibold"
                       >
                         {h}
@@ -345,6 +408,31 @@ export default function AdminPanel() {
                           month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
                         })}
                       </td>
+                      <td className="px-4 py-3 text-right whitespace-nowrap">
+                        <button
+                          onClick={async () => {
+                            if (window.confirm(`Are you sure you want to delete ${row.name}'s RSVP?`)) {
+                              setLoading(true);
+                              setError('');
+                              try {
+                                const res = await fetch(`/api/rsvps/${row.id}`, { method: 'DELETE' });
+                                if (!res.ok) throw new Error();
+                                setData(prev => prev.filter(r => r.id !== row.id));
+                              } catch (err) {
+                                setError('Failed to delete RSVP.');
+                              } finally {
+                                setLoading(false);
+                              }
+                            }
+                          }}
+                          className="p-1 rounded text-red-500 hover:bg-red-50 active:scale-95 transition-all inline-block"
+                          title="Delete RSVP"
+                        >
+                          <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current">
+                            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                          </svg>
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -380,7 +468,7 @@ export default function AdminPanel() {
                 Cancel
               </button>
               <button
-                onClick={() => { clearRSVPs(); setData([]); setConfirmClear(false); }}
+                onClick={handleClearAll}
                 className="flex-1 py-3 rounded-2xl text-sm font-bold text-white shadow-md transition-transform active:scale-95"
                 style={{ background: 'linear-gradient(135deg, #F44336, #C62828)' }}
               >

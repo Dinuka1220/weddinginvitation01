@@ -2,11 +2,19 @@ import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { BranchDivider, FloralAccent } from './FloralSVG';
 
-/* Persist to same localStorage key */
-function saveRSVP(entry) {
-  const existing = JSON.parse(localStorage.getItem('wedding_rsvp') || '[]');
-  existing.push(entry);
-  localStorage.setItem('wedding_rsvp', JSON.stringify(existing));
+/* Persist to MongoDB */
+async function saveRSVP(entry) {
+  const response = await fetch('/api/rsvps', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(entry),
+  });
+  if (!response.ok) {
+    throw new Error('Failed to save RSVP');
+  }
+  return await response.json();
 }
 
 export default function RSVPModal({ onClose }) {
@@ -26,7 +34,7 @@ export default function RSVPModal({ onClose }) {
     return e;
   };
 
-  const handleSubmit = (ev) => {
+  const handleSubmit = async (ev) => {
     ev.preventDefault();
     const e = validate();
     if (Object.keys(e).length) { setErrors(e); return; }
@@ -41,16 +49,23 @@ export default function RSVPModal({ onClose }) {
       guests: attendance === 'yes' ? guests : '0',
       timestamp: new Date().toISOString(),
     };
-    saveRSVP(entry);
-    setStep('success');
 
-    if (attendance === 'yes') {
-      confetti({ particleCount: 160, spread: 90, origin: { y: 0.55 },
-        colors: ['#D89B84', '#EEC9B9', '#C4877B', '#FFFDF9', '#A46752'] });
-      setTimeout(() => confetti({ particleCount: 80, spread: 60, angle: 60, origin: { x: 0, y: 0.6 },
-        colors: ['#D89B84', '#EEC9B9', '#A46752'] }), 300);
-      setTimeout(() => confetti({ particleCount: 80, spread: 60, angle: 120, origin: { x: 1, y: 0.6 },
-        colors: ['#D89B84', '#EEC9B9', '#A46752'] }), 400);
+    try {
+      setErrors(p => ({ ...p, submit: '' }));
+      await saveRSVP(entry);
+      setStep('success');
+
+      if (attendance === 'yes') {
+        confetti({ particleCount: 160, spread: 90, origin: { y: 0.55 },
+          colors: ['#D89B84', '#EEC9B9', '#C4877B', '#FFFDF9', '#A46752'] });
+        setTimeout(() => confetti({ particleCount: 80, spread: 60, angle: 60, origin: { x: 0, y: 0.6 },
+          colors: ['#D89B84', '#EEC9B9', '#A46752'] }), 300);
+        setTimeout(() => confetti({ particleCount: 80, spread: 60, angle: 120, origin: { x: 1, y: 0.6 },
+          colors: ['#D89B84', '#EEC9B9', '#A46752'] }), 400);
+      }
+    } catch (err) {
+      console.error(err);
+      setErrors(p => ({ ...p, submit: 'Failed to submit RSVP. Please verify database connection and try again.' }));
     }
   };
 
@@ -212,6 +227,7 @@ export default function RSVPModal({ onClose }) {
                 </div>
 
                 {/* Submit */}
+                {errors.submit && <p className="text-red-500 text-xs font-semibold text-center mb-2">{errors.submit}</p>}
                 <button
                   type="submit"
                   className="w-full py-4 rounded-2xl font-sans text-sm font-bold uppercase tracking-widest text-white transition-transform active:scale-95 shadow-md"
