@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-blush-bg:      #FAF3F0;
+  --color-blush-light:   #F5E8E4;
+  --color-blush:         #D89B84;
+  --color-blush-dark:    #A46752;
+  --color-rose:          #C4877B;
+  --color-rose-deep:     #8B4E44;
+  --color-petal:         #EEC9B9;
+  --color-cream-w:       #FFFDF9;
+  --color-brown-deep:    #3E2723;
+
+  --font-serif:          'Playfair Display', serif;
+  --font-cursive:        'Alex Brush', cursive;
+  --font-script:         'Great Vibes', cursive;
+  --font-sans:           'Montserrat', sans-serif;
+
+  --animate-fade-in:       fadeIn 1.2s ease-out forwards;
+  --animate-fade-in-up:    fadeInUp 1s ease-out forwards;
+  --animate-fade-in-down:  fadeInDown 1s ease-out forwards;
+  --animate-slide-left:    slideLeft 1s ease-out forwards;
+  --animate-slide-right:   slideRight 1s ease-out forwards;
+  --animate-float:         floatAnim 4s ease-in-out infinite;
+  --animate-pulse-soft:    pulseSoft 3s ease-in-out infinite;
+  --animate-shimmer:       shimmer 2.5s linear infinite;
+  --animate-spin-slow:     spin 12s linear infinite;
+  --animate-bounce-slow:   bounceSlow 2s ease-in-out infinite;
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideLeft {
+    from { opacity: 0; transform: translateX(60px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideRight {
+    from { opacity: 0; transform: translateX(-60px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes floatAnim {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-10px); }
+  }
+  @keyframes pulseSoft {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.7; }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes bounceSlow {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root {
+  margin: 0; padding: 0;
+  width: 100%; min-height: 100vh;
+  background-color: #FAF3F0;
+  color: #3E2723;
+  font-family: 'Montserrat', sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* ── Scrollbar ─────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #FAF3F0; }
+::-webkit-scrollbar-thumb { background: #D89B84; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #A46752; }
+
+/* ── Utility helpers ────────────────────────── */
+.blush-gradient {
+  background: linear-gradient(135deg, #D89B84 0%, #C4877B 50%, #A46752 100%);
+}
+.blush-shimmer {
+  background: linear-gradient(90deg, #D89B84 0%, #EEC9B9 40%, #D89B84 80%, #C4877B 100%);
+  background-size: 200% auto;
+  animation: shimmer 2.5s linear infinite;
+}
+.rose-text {
+  background: linear-gradient(135deg, #D89B84, #A46752);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.wax-shadow {
+  box-shadow: 0 6px 18px rgba(0,0,0,.25),
+              inset 0 3px 6px rgba(255,255,255,.3),
+              inset 0 -3px 6px rgba(0,0,0,.35);
+}
+.card-shadow {
+  box-shadow: 0 8px 40px rgba(164,103,82,.18), 0 2px 12px rgba(0,0,0,.08);
+}
+.floral-border {
+  border: 1.5px solid rgba(216,155,132,.35);
+  border-radius: 2px;
+}
+
+/* ── Section animation helpers ──────────────── */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s ease, transform .8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-left { opacity: 0; transform: translateX(-50px); transition: opacity .8s ease, transform .8s ease; }
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+.reveal-right { opacity: 0; transform: translateX(50px); transition: opacity .8s ease, transform .8s ease; }
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
