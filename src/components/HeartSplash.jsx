@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FloralTopRight, FloralBottomLeft } from './FloralSVG';
+import flowerright from '../assets/landing flower 2.png'
+import flowerleft from '../assets/landing flower1.png'
 
 export default function HeartSplash({ onComplete }) {
   const [visible, setVisible] = useState(false);
@@ -11,8 +13,17 @@ export default function HeartSplash({ onComplete }) {
       className="fixed inset-0 bg-[#FAF3F0] flex flex-col justify-center items-center cursor-pointer overflow-hidden z-50"
     >
       {/* Watercolour floral corners */}
-      <FloralTopRight className="absolute top-0 right-0 w-52 md:w-72 pointer-events-none opacity-90" />
-      <FloralBottomLeft className="absolute bottom-0 left-0 w-52 md:w-72 pointer-events-none opacity-90" />
+      <img
+  src={flowerleft}
+  alt="Floral Decoration"
+  className="absolute top-0 right-0 w-52 md:w-72 pointer-events-none opacity-90"
+/>
+
+<img
+  src={flowerright}
+  alt="Floral Decoration"
+  className="absolute bottom-0 left-0 w-52 md:w-72 pointer-events-none opacity-90"
+/>
 
       {/* Watermark background roses */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
@@ -26,7 +37,7 @@ export default function HeartSplash({ onComplete }) {
       >
         {/* Top cursive line */}
         <p className="font-cursive text-2xl md:text-3xl text-blush-dark mb-4 tracking-wide" style={{ fontFamily: "'Alex Brush', cursive" }}>
-          Nosso casamento
+          A Celebration of Love
         </p>
 
         {/* Heart SVG with names inside */}
@@ -48,9 +59,9 @@ export default function HeartSplash({ onComplete }) {
               opacity="0.4"
             />
             {/* Names */}
-            <text x="100" y="80" textAnchor="middle" fontFamily="'Playfair Display', serif" fontSize="16" fill="#A46752" fontWeight="500">Anuruddha</text>
-            <text x="100" y="103" textAnchor="middle" fontFamily="'Alex Brush', cursive" fontSize="20" fill="#D89B84">&amp;</text>
-            <text x="100" y="126" textAnchor="middle" fontFamily="'Playfair Display', serif" fontSize="16" fill="#A46752" fontWeight="500">Yashara</text>
+            <text x="100" y="65" textAnchor="middle" fontFamily="'Playfair Display', serif" fontSize="16" fill="#A46752" fontWeight="500">Nuwan</text>
+            <text x="100" y="85" textAnchor="middle" fontFamily="'Alex Brush', cursive" fontSize="20" fill="#D89B84">&amp;</text>
+            <text x="100" y="105" textAnchor="middle" fontFamily="'Playfair Display', serif" fontSize="16" fill="#A46752" fontWeight="500">Chathurika</text>
           </svg>
         </div>
 
@@ -59,7 +70,7 @@ export default function HeartSplash({ onComplete }) {
           className="font-cursive text-4xl md:text-5xl text-blush-dark mt-3 tracking-wide leading-snug"
           style={{ fontFamily: "'Alex Brush', cursive", animationDelay: '0.4s', opacity: visible ? 1 : 0, transition: 'opacity 1.5s ease 0.4s' }}
         >
-          Yashara &amp; Anuruddha
+          Nuwan &amp; Chathurika
         </p>
 
         {/* Tap indicator */}

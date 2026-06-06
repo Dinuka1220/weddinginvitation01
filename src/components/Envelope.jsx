@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FloralTopRight, FloralBottomLeft, EnvelopeFloral } from './FloralSVG';
+import flowerright from '../assets/landing flower 2.png'
+import flowerleft from '../assets/landing flower1.png'
 
 export default function Envelope({ onOpen }) {
   const [phase, setPhase] = useState('closed'); // closed → flapOpening → cardRising → done
@@ -23,10 +25,18 @@ export default function Envelope({ onOpen }) {
       style={{ background: '#FAF3F0' }}
       onClick={handleTap}
     >
-      {/* ── watercolour floral corners ── */}
-      <FloralTopRight className="absolute top-0 right-0 w-48 md:w-72 pointer-events-none opacity-95 z-30" />
-      <FloralBottomLeft className="absolute bottom-0 left-0 w-48 md:w-72 pointer-events-none opacity-95 z-30" />
-
+      {/* Watercolour floral corners */}
+            <img
+        src={flowerleft}
+        alt="Floral Decoration"
+        className="absolute top-0 right-0 w-52 md:w-72 pointer-events-none opacity-90"
+      />
+      
+      <img
+        src={flowerright}
+        alt="Floral Decoration"
+        className="absolute bottom-0 left-0 w-52 md:w-72 pointer-events-none opacity-90"
+      />
       {/* ── top cursive label ── */}
       <p
         className="relative z-20 font-cursive text-2xl md:text-3xl text-blush-dark mb-4 md:mb-6 tracking-wide"
@@ -38,7 +48,7 @@ export default function Envelope({ onOpen }) {
           pointerEvents: phase !== 'closed' ? 'none' : 'auto',
         }}
       >
-        Nosso casamento
+       A Celebration of Love
       </p>
 
       {/* ══════════ ENVELOPE CONTAINER ══════════

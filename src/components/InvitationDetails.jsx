@@ -5,6 +5,10 @@ import RSVPModal from './RSVPModal';
 import WeddingTimeline from './WeddingTimeline';
 import RSVPSection from './RSVPSection';
 import confetti from 'canvas-confetti';
+import flowervine from '../assets/flowervine.png'
+import flowerright from '../assets/landing flower 2.png'
+import flowerleft from '../assets/landing flower1.png'
+import flowertop from '../assets/flowertop.png'
 
 /* ─── tiny scroll-reveal hook ─────────────────────────────── */
 function useReveal() {
@@ -45,14 +49,14 @@ export default function InvitationDetails() {
   useReveal();
   const t = useCountdown('2026-07-24T08:30:00');
   const [showGallery, setShowGallery] = useState(false);
-  const [showRSVP,    setShowRSVP]    = useState(false);
-  const [isPlaying,   setIsPlaying]   = useState(false);
+  const [showRSVP, setShowRSVP] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef(null);
 
   /* auto-play on first interaction */
   useEffect(() => {
     const tryPlay = () => {
-      audioRef.current?.play().then(() => setIsPlaying(true)).catch(() => {});
+      audioRef.current?.play().then(() => setIsPlaying(true)).catch(() => { });
       window.removeEventListener('click', tryPlay);
     };
     window.addEventListener('click', tryPlay);
@@ -62,7 +66,7 @@ export default function InvitationDetails() {
   const toggleAudio = (e) => {
     e.stopPropagation();
     if (isPlaying) { audioRef.current?.pause(); setIsPlaying(false); }
-    else           { audioRef.current?.play().then(() => setIsPlaying(true)).catch(() => {}); }
+    else { audioRef.current?.play().then(() => setIsPlaying(true)).catch(() => { }); }
   };
 
   /* Google Calendar link */
@@ -101,9 +105,9 @@ export default function InvitationDetails() {
             style={{ background: 'rgba(255,253,249,0.85)', border: '1.5px solid rgba(216,155,132,.5)' }}
           >
             {isPlaying ? (
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><rect x="6" y="4" width="4" height="16" /><rect x="14" y="4" width="4" height="16" /></svg>
             ) : (
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M8 5v14l11-7z"/></svg>
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M8 5v14l11-7z" /></svg>
             )}
           </button>
         </div>
@@ -141,7 +145,11 @@ export default function InvitationDetails() {
           </h1>
         </div>
 
-        <BranchDivider className="w-56 md:w-72 mx-auto my-6 reveal" />
+        <img
+          src={flowervine}
+          alt="Flower Vine"
+          className="w-56 md:w-72 mx-auto my-6 reveal"
+        />
 
         {/* Blessing line */}
         <p className="font-serif text-sm md:text-base text-brown-deep/70 italic mb-6 reveal">
@@ -169,9 +177,18 @@ export default function InvitationDetails() {
           SECTION 3 — DATE & VENUE
       ═══════════════════════════════════════════════ */}
       <section className="py-10 px-6 text-center bg-[#FAF3F0] relative">
-        <FloralBottomLeft className="absolute bottom-0 left-0 w-40 md:w-56 pointer-events-none opacity-60" />
-        <FloralTopRight   className="absolute top-0 right-0 w-40 md:w-56 pointer-events-none opacity-60" />
+        {/* Watercolour floral corners */}
+        <img
+          src={flowerleft}
+          alt="Floral Decoration"
+          className="absolute top-0 right-0 w-52 md:w-72 pointer-events-none opacity-90"
+        />
 
+        <img
+          src={flowerright}
+          alt="Floral Decoration"
+          className="absolute bottom-0 left-0 w-52 md:w-72 pointer-events-none opacity-90"
+        />
         {/* Big date */}
         <div className="reveal">
           <p
@@ -188,7 +205,11 @@ export default function InvitationDetails() {
           </p>
         </div>
 
-        <BranchDivider className="w-52 mx-auto my-6 reveal" />
+        <img
+          src={flowervine}
+          alt="Flower Vine"
+          className="w-56 md:w-72 mx-auto my-6 reveal"
+        />
 
         {/* Venue */}
         <div className="reveal space-y-1">
@@ -272,7 +293,11 @@ export default function InvitationDetails() {
       >
         {/* Floral top bouquet */}
         <div className="flex justify-center mb-8 reveal">
-          <FloralAccent className="w-36 h-36 md:w-44 md:h-44 drop-shadow-md animate-float" />
+          <img
+  src={flowertop}
+  alt="Floral Accent"
+  className=" h-36 md:w- md:h-44 drop-shadow-md animate-float"
+/>
         </div>
 
         {/* Action buttons */}
@@ -284,7 +309,7 @@ export default function InvitationDetails() {
             className="flex items-center space-x-4 bg-white/80 backdrop-blur-sm rounded-xl px-5 py-3.5 shadow-md border border-white/60 hover:bg-white transition-all active:scale-95"
           >
             <span className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#EDD5C8' }}>
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" /></svg>
             </span>
             <span className="font-sans text-sm font-semibold text-brown-deep tracking-wide">Ceremony Location</span>
           </a>
@@ -296,7 +321,7 @@ export default function InvitationDetails() {
             className="flex items-center space-x-4 bg-white/80 backdrop-blur-sm rounded-xl px-5 py-3.5 shadow-md border border-white/60 hover:bg-white transition-all active:scale-95"
           >
             <span className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#EDD5C8' }}>
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" /></svg>
             </span>
             <span className="font-sans text-sm font-semibold text-brown-deep tracking-wide">Reception Location</span>
           </a>
@@ -307,7 +332,7 @@ export default function InvitationDetails() {
             className="flex items-center space-x-4 bg-white/80 backdrop-blur-sm rounded-xl px-5 py-3.5 shadow-md border border-white/60 hover:bg-white transition-all active:scale-95 w-full text-left"
           >
             <span className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#EDD5C8' }}>
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" /></svg>
             </span>
             <span className="font-sans text-sm font-semibold text-brown-deep tracking-wide">Confirm Attendance (RSVP)</span>
           </button>
@@ -318,7 +343,7 @@ export default function InvitationDetails() {
             className="flex items-center space-x-4 bg-white/80 backdrop-blur-sm rounded-xl px-5 py-3.5 shadow-md border border-white/60 hover:bg-white transition-all active:scale-95 w-full text-left"
           >
             <span className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#EDD5C8' }}>
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" /></svg>
             </span>
             <span className="font-sans text-sm font-semibold text-brown-deep tracking-wide">Photo Gallery</span>
           </button>
@@ -330,7 +355,7 @@ export default function InvitationDetails() {
             className="flex items-center space-x-4 bg-white/80 backdrop-blur-sm rounded-xl px-5 py-3.5 shadow-md border border-white/60 hover:bg-white transition-all active:scale-95"
           >
             <span className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: '#EDD5C8' }}>
-              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-blush-dark"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" /></svg>
             </span>
             <span className="font-sans text-sm font-semibold text-brown-deep tracking-wide">Add to Calendar</span>
           </a>
@@ -378,7 +403,7 @@ export default function InvitationDetails() {
           MODALS
       ═══════════════════════════════════════════════ */}
       {showGallery && <Gallery onClose={() => setShowGallery(false)} />}
-      {showRSVP    && <RSVPModal onClose={() => setShowRSVP(false)} />}
+      {showRSVP && <RSVPModal onClose={() => setShowRSVP(false)} />}
     </div>
   );
 }

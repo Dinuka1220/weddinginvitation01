@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { FloralTopRight, FloralBottomLeft, BranchDivider } from './FloralSVG';
+import flowerright from '../assets/landing flower 2.png'
+import flowerleft from '../assets/landing flower1.png'
 
 const EVENTS = [
   {
@@ -88,8 +90,19 @@ export default function WeddingTimeline() {
       style={{ background: '#FAF3F0' }}
     >
       {/* ── Corner florals ── */}
-      <FloralTopRight className="absolute top-0 right-0 w-40 md:w-56 pointer-events-none opacity-50" />
-      <FloralBottomLeft className="absolute bottom-0 left-0 w-40 md:w-56 pointer-events-none opacity-50" />
+      {/* Watercolour floral corners */}
+            <img
+        src={flowerleft}
+        alt="Floral Decoration"
+        className="absolute top-0 right-0 w-52 md:w-72 pointer-events-none opacity-90"
+      />
+      
+      <img
+        src={flowerright}
+        alt="Floral Decoration"
+        className="absolute bottom-0 left-0 w-52 md:w-72 pointer-events-none opacity-90"
+      />
+      
 
       {/* ── Section header ── */}
       <div className="text-center mb-14 tl-reveal">
