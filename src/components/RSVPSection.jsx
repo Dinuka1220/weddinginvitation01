@@ -2,19 +2,17 @@ import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import { BranchDivider, FloralAccent } from './FloralSVG';
 
-/* Persist to MongoDB */
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ezdfaxxdbhgabzoedtoy.supabase.co';
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_pH7zszYEIU1MpLjHQ9vHlA_lWgOscJ4';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+/* Persist to Supabase Directly */
 async function saveRSVP(entry) {
-  const response = await fetch('/api/rsvps', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(entry),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to save RSVP');
-  }
-  return await response.json();
+  const { data, error } = await supabase.from('rsvps').insert([entry]).select();
+  if (error) throw error;
+  return data;
 }
 
 export default function RSVPSection() {

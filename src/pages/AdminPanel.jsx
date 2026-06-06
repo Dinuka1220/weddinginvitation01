@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useMemo } from 'react';
 
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://ezdfaxxdbhgabzoedtoy.supabase.co';
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_pH7zszYEIU1MpLjHQ9vHlA_lWgOscJ4';
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 /* ── helpers ── */
 async function fetchRSVPs() {
-  const response = await fetch('/api/rsvps');
-  if (!response.ok) {
-    throw new Error('Failed to fetch RSVPs');
-  }
-  return await response.json();
+  const { data, error } = await supabase.from('rsvps').select('*').order('timestamp', { ascending: false });
+  if (error) throw error;
+  return data || [];
 }
 
 async function deleteRSVPs() {
-  const response = await fetch('/api/rsvps', {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Failed to clear RSVPs');
-  }
-  return await response.json();
+  const { error } = await supabase.from('rsvps').delete().neq('id', 0);
+  if (error) throw error;
+  return { message: 'Cleared' };
 }
 function toCSV(data) {
   const header = ['ID', 'Name', 'Side', 'Phone', 'Message', 'Attendance', 'Submitted At'];
@@ -415,8 +415,8 @@ export default function AdminPanel() {
                               setLoading(true);
                               setError('');
                               try {
-                                const res = await fetch(`/api/rsvps/${row.id}`, { method: 'DELETE' });
-                                if (!res.ok) throw new Error();
+                                const { error: deleteError } = await supabase.from('rsvps').delete().eq('id', row.id);
+                                if (deleteError) throw deleteError;
                                 setData(prev => prev.filter(r => r.id !== row.id));
                               } catch (err) {
                                 setError('Failed to delete RSVP.');
